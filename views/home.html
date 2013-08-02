@@ -1,0 +1,936 @@
+<!--[if lt IE 8]><html class="no-js ie6 oldie" lang="en"> 
+<![endif]--><!--[if IE 7]><html class="no-js ie7 oldie" lang="en">
+<![endif]--><!--[if IE 8]><html class="no-js ie8 oldie" lang="en">
+<![endif]--><!--[if gt IE 8]><!-->
+
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Swap On</title>
+		<meta name="description" content="" />
+		<meta name="author" content="Michael K. Gunnulfsen" />
+		<link rel="stylesheet" href="css/bootstrap5.css" type="text/css" />
+		<link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<link rel="stylesheet" href="css/docs.css" type="text/css" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	</head>
+
+	<body>
+
+	<div id="navigationId"></div>
+	<div id="modalViewId"></div>
+	<div id="mainBannerId"></div>
+	<div id="mainContentId"></div>
+	<div id="thingViewId"></div>
+	<div id ="thingsId"></div>
+	<div id="footer"></div>
+
+	<script type="text/template" id="navigation-template">
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container" style="width: auto;">       
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li><a href="#" class="logo"><img src="img/logo2.jpg" class="img-rounded" width=100px;></a></li>
+							<li><a href="#about" data-toggle="modal">About</a></li>
+							<li><a href="#contact" data-toggle="modal">Contact</a></li>
+						</ul>
+
+						
+						<% if ( app.Registry.isLoggedIn() ) { %>
+						<ul class="nav">
+							<li class="dropdown">
+                      			
+                      			<a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">Swap Requests 
+
+                      			<% if ( data.swapRequests ) { %>
+                      				<span class="badge badge-success">
+                      					<%= data.swapRequests.length %>
+                      				</span>
+                      				<ul class="dropdown-menu swap-menu" role="menu" aria-labelledby="drop2">
+
+                      					<% _.each(data.swapRequests, function(sr) { %>
+                      						<li>
+                      						<div class="row-fluid">
+                      							<div class="span2">                      						
+                      								<img src="/img/<%=sr.from.imgPath%>" class="artifact-xsmall">
+                      							</div>
+                      							<div class="span8">
+                      								<p>
+                      								<%= sr.from.username.split(" ")[0]%> wants to swap 
+                      								<% if ( sr.thing != "General" ) {%>
+                      									</p><a href = "/#thing/<%= sr.thing %>">one of your things</a>
+                      								<% } else { %>
+                      									stuff with you! </p>
+                      								<% } %>
+                      								<a href="/#user/<%= sr.from._id %>">Check out his stuff first, to see </br>if he has something you would like</a>
+                      							</div>
+                      							<div class="span2">
+                      								<button class="btn btn-mini btn-success accSwapBtn" id="accSwapBtn_<%= sr.from._id %>_<%= sr._id %>">Accept</button>
+                      								<button class="btn btn-mini rejSwapBtn" id="rejSwapBtn_<%= sr.from._id %>_<%= sr._id %>" rejSwap_<%= sr._id %>>Reject</button>
+                      							</div>
+                      						</div>
+	                      					</li>
+                      					<% }) %>
+                      				</ul>
+                      			<% } else { %>
+                      				<span class="badge">0</span>
+                      			<% } %>
+                      			</a>
+                    		</li> <!-- /dropdown -->
+                    	</ul><!-- /nav -->
+
+
+
+						<ul class="nav">
+                    		<li class="dropdown">                      			
+                      			<a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">Swap Replies 
+
+                      			<% if ( data.swapReplies ) { %>
+                      				<span class="badge badge-success">
+                      					<%= data.swapReplies.length %>
+                      				</span>
+                      				<ul class="dropdown-menu swap-menu" role="menu" aria-labelledby="drop2">
+
+                      					<% _.each(data.swapReplies, function(sr) { %>
+                      						<li>
+                      						<div class="row-fluid">
+                      							<div class="span2">                      						
+                      								<img src="/img/<%=sr.fromId.imgPath%>" class="artifact-xsmall">
+                      							</div>
+                      							<div class="span8">
+                      								<a href="/#user/<%=sr.fromId._id%>">
+                      								<%= sr.fromId.username.split(" ")[0]%> responded to swapping: 
+
+                      								</br>"<%=sr.answer%>" </a>
+                      							</div>
+                      							<div class="span2">
+                      								<button class="btn btn-mini btn-success finishSwap" id="accSwapBtn_<%= sr._id %>">Nice</button>
+                      							</div>
+                      						</div>
+	                      					</li>
+                      					<% }) %>
+                      				</ul>
+                      			<% } else { %>
+
+                      				<span class="badge">0</span>
+                      			<% } %>
+                      			</a>
+                    		</li><!-- /dropdown -->
+                    	</ul><!-- /nav -->
+                    	
+                    	<ul class="nav">
+                    		<li><a class="btn btn-success" href="/#netshop" style="color: white;">Netshop</a></li>
+                    	</ul>
+
+						<% } %> <!-- if is logged in -->
+
+						<% if ( app.Registry.isLoggedIn() ) { %>
+							<ul class="nav pull-right">
+
+							<!--
+							<div class="addAThingInNav">
+								<li><i class="icon-leaf"></i>
+								<a href="/#addNewSwapThing" class="btn btn-original">Add a Thing to Swap</a>
+								<i class="icon-leaf"></i></li>
+							</div>
+
+							<div class="addAThingInNav">
+								<li><p class ="lead">Or</p></li>
+							</div>
+							<div class="addAThingInNav">
+								<li><i class="icon-heart"></i>
+								<a href="#addNewGivaAwayThing" class="btn btn-original">Add a Thing to Give Away</a>
+								<i class="icon-heart"></i></li>
+							</div>
+							-->
+								<li><a href="/#user/<%= app.Registry.getUser()._id %>" ><%= app.Registry.getUser().username %></a></li>
+							<li><a href="#" class="signOutBtn">Sign out</a></li>
+							</ul>
+						<% } else { %>
+							<ul class="nav pull-right">
+								<li><a href="#signInModal" data-toggle="modal">Sign in</a></li>
+								<li><a href="#signUpModal" data-toggle="modal">Register</a></li>
+							</ul>
+						<% } %>
+					</div><!-- /.nav-collapse -->
+				</div>
+			</div><!-- /navbar-inner -->
+		</div>
+
+
+		<div id="sendSwapReply" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    			<h3>Respond to swap request</h3>
+			</div>  		
+  			<div class="modal-body">
+  				<div class ="row-fluid">
+  					<div class="span7">
+    					<textarea rows="4" id="accSwapText" placeholder="Include contact information so you two can get in touch and plan the swap!"></textarea>
+    				</div>
+    				<div class="span5">
+    					<button class="btn btn-medium btn-success" id="sndRplyBtn" data-dismiss="modal" aria-hidden="true">Send!</button>
+    				</div>
+    			</div>
+  			</div>  			
+  		</div>
+
+
+		<div id="signUpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h2 id="myModalLabel">Register</h2>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="inputUsername">Username</label>
+						<div class="controls">
+							<input type="text" id="inputUsername" placeholder="Username">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputEmail" autocomplete="on">Email</label>
+						<div class="controls">
+							<input type="email" id="inputEmail" placeholder="Email">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputPassword">Password</label>
+						<div class="controls">
+							<input type="password" id="inputPassword1" placeholder="Password">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" >Repeat Password</label>
+						<div class="controls">
+							<input type="password" id="inputPassword2" placeholder="Password again">
+							<span class="help-inline" style="color:red;" id="passMatch"></span>
+						</div>
+					</div>
+					<div></div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="registerUser">Register!</button>
+			</div>
+		</div>
+
+ 
+
+		<div id="signInModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+			<h3>Sign in</h3>
+		</div>
+
+		<div class="modal-body">
+			<form class="form-inline">
+				<input type="text" class="input-large" id="loginEmail" placeholder="Email"/>
+				<input type="password" class="input-small" id="loginPass" placeholder="Password"/>
+				<button id="signinButton" class="btn bnt-success">Sign in</button>
+				<span class="help-inline" style="color:red;" id="wrngPas"></span>
+			</form>
+			<p>Not registered? <a href="" class="regIfNot">Register here</a></p>
+		</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="frontPage-template">
+	
+		<div class="marketing">
+
+		    <div class="row-fluid front-page-marketing">
+		      <div class="span4">
+		        <!-- <img class="marketing-img" src="assets/img/bs-docs-responsive-illustrations.png"> -->
+		        <h2>Protect the environment</h2>
+		        <p>Reuse things in order to protect our environment! Avoid expensive and unnesserary purchases by swapping stuff.</p>
+		      </div>
+		      <div class="span4">
+		        <!-- <img class="marketing-img" src="assets/img/bs-docs-responsive-illustrations.png"> -->
+		        <h2>Swap and give away stuff</h2>
+		        <p>Do you have heaps of stuff lying around your home that you dont need? Instead of throwing these in the garbage, swap them! Find things you like and ask to make an exhange.  </p>
+		      </div>
+		      <div class="span4">
+		       <!-- <img class="marketing-img" src="assets/img/bs-docs-bootstrap-features.png"> -->
+		        <h2>Fun and social</h2>
+		        <p>Interact with other people in a fun and social matter. Find other people that cares about the environment, follow and like their beautiful environment blog, and see their repository of swap-things.</p>
+		      </div>
+		    </div>
+
+		   <!-- <hr class="soften"> -->
+
+
+			<div class="row-fluid">
+			<ul class="thumbnails">
+				<% _.each(_.first(categories,12), function(category, i) { %>
+
+
+					 <li class="span2">
+					 	<div class="categoryThumb">
+    						<a href="#category/<%= category.url %>" class="thumbnail">
+      						<img src="/img/<%= category.img %>" alt="<%= category.title %>">
+      						<h2><%= category.title.replace(/\s/g, '<br>') %></h2>
+   						 	</a>
+   						 </div>
+  					</li>
+
+
+					<% if (i==5) { %>
+						</ul>
+						</div>
+						<div class="row-fluid">
+						<ul class="thumbnails">
+					<% } %>	
+				<% }); %>	
+				</ul>
+			</div>
+
+
+
+		    <div class="row-fluid front-page-marketing">
+		    	
+		    	<div class="span3"></div>
+
+
+
+
+		    	<% if ( app.Registry.isLoggedIn() ) { %>
+		    		<div class="span3">
+		    		<a href="/#addNewSwapThing" role="button" class="btn btn-primary btn-xlarge">Add a thing to swap!</a>
+		    		</div>
+		    		<div class="span3">
+		    		<a href="/#addNewGivaAwayThing" role="button" class="btn btn-success btn-xlarge">Add a thing to give away!</a>
+		    		</div>
+						<% } else { %>
+								<div class="span3">
+								<a href="#signInModal" role="button" class="btn btn-primary btn-xlarge" data-toggle="modal">Sign in</a>
+								</div>
+								<div class="span3">
+								<a href="#signUpModal" role="button" class="btn btn-success btn-xlarge" data-toggle="modal">Register</a>
+								</div>
+						<% } %>
+
+		    	<div class="span3"></div>
+		    </div>
+		
+
+
+		<div class="marketing">
+
+		    <div class="row-fluid front-page-text">
+		    <div class="span2"></div>
+		    	<div class="span8">
+		    		<p class="lead long-text">Watches Womens Jewels Childrens-clothing Chair
+		      	Table 		Nintendo 		Chainsaw 	</p>
+		    	</div>
+		    <div class="span2"></div>
+		    </div>
+
+		  <div class="row-fluid front-page-text">
+		  <div class="span2"></div>
+		    	<div class="span8">
+		    		<p class="lead long-text">Boat Tv Vacum-cleaner Paintings Men's clothing		 Uni-books Camera Toys</p>
+		    	</div>
+		    <div class="span2"></div>
+		    </div>
+
+		  <div class="row-fluid front-page-text">
+		  <div class="span2"></div>
+		    	<div class="span8">
+		    		<p class="lead long-text">
+		     	Neclesses Dress Childrens-cloting 	Chair
+		      	Table Interiour	Chainsaw Couch 	</p>
+		    	</div>
+		    <div class="span2"></div>
+	  	</div>
+	  	</div>
+	</script>
+
+	<script type="text/template" id="things-template">
+		<div id="things-inner">
+		<div class="container">
+
+		<div id="mustBeLoggedInModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-body center">
+			<p class="lead">In order to use saveNswap you must either</p>
+
+			<a href="#signInModal" data-dismiss="modal"  data-toggle="modal" aria-hidden="true" class="btn btn-xlarge btn-primary">Sign in</a>
+			Or
+			<a href="#signUpModal" class="btn btn-xlarge btn-success" data-dismiss="modal"  data-toggle="modal" aria-hidden="true">Register</a>
+			</p>
+			</div>
+		</div>
+
+
+		<div class="subCategori-text">
+			<h1><%= category %> </h1>
+		</div>
+
+		<div class="row artifact-row">
+			<% _.each(things, function(thing, i){ %>
+				<div class="span3">
+					<div class="artifact-cat">
+
+						<a href="" class="artifact-imgsap"
+						 id="thing_<%= i %>_<%= thing.get('_id') %>">
+						<img src="/img/<%= thing.get('imgPath') %>"
+						 class="artifact-medium img-polaroid thingImg" id="thingImg_<%= i %>">
+
+						<button class="checkOutButton btn btn-success btn-medium" id="thingBtn_<%= i %>">Check out</button>
+						</a>
+						<div class="underThing">
+
+							<p class="likes">
+								<a href="" class="loveTree"  id="loveTree_<%=i%>">
+									<img src="/img/tree.png" class="tree" />
+								</a>
+								<%= thing.get('loves').length%> Loves
+							</p>
+							<p class="small"><%= thing.get('placementCity') %>,<%= thing.get('placementCountry') %> </p>
+
+							<p>
+							<% if (thing.get('tags').length > 0) { %>
+								<i class="icon-leaf"></i>
+							<%}%>
+							<% _.each(thing.get('tags'), function(tag) { %> 
+								<%= tag %> <i class="icon-leaf"></i>
+							<% }) %>
+							</p>
+						</div>
+					</div>
+				</div>
+				
+				<% if ( (i+1) % 4 == 0 ) {%>
+					</div>
+					<div class="row artifact-row">
+				<% } %>
+			<% }) %>
+
+			</div> <!-- end row-artifact-row -->
+
+		</div>
+		</div> <!-- /thing-inner -->
+	</script>
+
+	<script type="text/template" id="subCategory-template">
+
+		<div class="row-fluid">
+		<div class="span1"></div>
+		<ul class="thumbnails">
+		<% _.each(categories, function(category) { %>
+
+			<li class="span1">
+				<div class="thumbnail">
+					<img src="/img/subCategories/<%= category.img %>"/> 
+					</a>
+				</div>
+				<p class="lead">
+				<a href="#" class="subCategoryClk" id="subCat_<%= category.title.replace(/\s/g,"_") %>"> 
+				<%= category.title %></a></p>
+
+			</li>
+			<% }); %>
+		</ul>
+		<div class="span1"></div>
+		</div>
+
+	</script>
+</ul>
+
+
+	<script type="text/template" id="mainBanner-template">
+
+		<div class="jumbotron masthead">
+			<div class="container">
+				<h1>saveNswap</h1>
+				<p><%= topLabel %></p>
+
+
+				<!--Denne er litt stor. gjemmer den unna for naa -->
+				<div class="search-form">
+					
+					<input type="text" placeholder="What are you looking for" class="input-xlarge search-query" id="searchThings">
+					<input type="text" placeholder="Country" class="input-small search-query" id="searchThings_country">
+					<input type="text" placeholder="City" class="input-small search-query" id="searchThings_city">
+					
+					<a href="#" class="btn btn-success searchForThings">Search</a>
+				</div>
+				<!-- -->
+			</div>
+		</div>
+
+	</script>
+
+	<script type="text/template" id="thing-template">
+		<div id="thingModal" class="modal hide fade thingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		 	<div class="modal-header">
+    			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+  			</div>
+
+  			<div class="row-fluid">
+  				<div class="span1"></div>
+  				<div class="span6">
+  					<h1> <%= thing.title %></h1>
+  					<p class="lead"> - <%= thing.category %>, <%= thing.subCategory %>  </p>
+  					<p><%= thing.place %> </p>
+  				</div>
+					
+					<div class="span5"></div>
+  			</div>
+
+			<div class ="row-fluid">
+				<div class ="span1"></div>
+				<div class ="span3">
+					<img src="/img/<%= thing.imgPath %>"
+					 class="img-polaroid" alt="<%=thing.description %>" /> 
+				</div>
+				<div class="span4">
+
+					<% if ( thing.owner._id != app.Registry.getUserId() ) { %>
+					<h1> You and <%= thing.owner.username.split(" ")[0] %> matches</h1>
+  					<h1 class="matchPercent"> <%= Math.ceil(match) %>% </h1>
+
+  					<button class="btn btn-success btn-large gotoUserButton">Check out <%=thing.owner.username%>s other stuff!</button>
+  					<% } else { %>
+						<h1> This thing is owned by you </h1>  						
+  					<% } %>
+  					
+  					<hr class="soften">
+  					<p class="lead">Tags for this thing </p>  					
+  					<% _.each(thing.tags, function(t) { %>
+  						<span class="label label-info"><%= t %> </span>
+  					<% }) %>
+				</div> <!-- /span 4 -->
+				<div class="span4">
+
+						<p class ="lead thingOwner">Owner: </p>
+						<img src="/img/<%= thing.owner.imgPath %>" class="img-polaroid thingOwner thingOwnerLink" id="thingOwnerImgId_<%= thing.owner._id %>"/>
+						<a href="" class="lead thingOwnerLink" id="thingOwnerLinkId_<%= thing.owner._id %>"><%= thing.owner.username %></a>
+
+						<p><%= thing.owner.username %> is also looking for: 	</p>
+						<p>
+							<% _.each(thing.owner.interests, function(interest) { %>
+								<span class="label label-success"><%= interest %></span>	
+							<% }) %>
+						</p>					
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="profile-template">
+
+		<div id="sendSwapReplyProfile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    			<h3>Respond to the Swap equest</h3>
+			</div>  		
+  			<div class="modal-body">
+  				<div class ="row-fluid">
+  					<div class="span7">
+    					<textarea rows="4" id="accSwapTextProfile" placeholder="Include contact information so you two can get in touch and plan the swap!"></textarea>
+    				</div>
+    				<div class="span5">
+    					<button class="btn btn-medium btn-success" id="sndRplyBtnProfile" data-dismiss="modal" aria-hidden="true">Send!</button>
+    				</div>
+    			</div>
+  			</div>  			
+  		</div>
+
+
+		<div id="swapReqSentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		
+  			<div class="modal-body">
+
+  				<div class ="row-fluid">
+  					<div class="span7">
+    					<p class="lead">Swap request was sent!</p>
+    					<p>Let us wait for <%= user.username %> to reply..</p>
+    				</div>
+    				<div class="span5">
+    					<button class="btn btn-medium btn-success" data-dismiss="modal" aria-hidden="true">Nice</button>
+    				</div>
+    			</div>
+  			</div>  			
+  		</div>
+
+		<div class="container profile">
+			<div class="row-fluid">
+				<div class="span6">
+					<h1><%= user.username %></h1>
+					<p class="lead"> <%= user.city %> - <%= user.country %> </p>
+					<p class="lead"> <%= user.about %> </p>
+					
+					<p>Things that I like: 
+							<% _.each(user.interests, function(interest) { %>
+								<span class="label label-success"><%= interest %></span>	
+							<% }) %>
+						</p>
+
+					<hr class="soften">
+
+					 <% if ( isUser == true) { %>
+						<button class="btn btn-large btn-success editProfileBtn">
+							Edit your profile
+						</button>					 	
+					 <% } else if ( app.Registry.isLoggedIn() ) { %>
+						<h3>You and <%= user.username.split(" ")[0] %> matches <%= Math.ceil(match) %> % </h3> 
+						<button class="btn btn-large btn-success askToSwapGen">
+							Swap stuff with <%= user.username.split(" ")[0] %>!
+						</button>
+					<% } else {%>
+						<h3> Log in to be able to swap with <%= user.username.split(" ")[0] %> 
+					<% } %>
+				</div>
+				<div class="span6">
+					<img src="/img/<%=user.imgPath %>" class="img-polaroid artifact-medium">
+				</div>
+			</div>
+
+
+			<div id="editProfileNowModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+			<h2 id="myModalLabel">Congrats!</h2>
+			</div>
+			<div class="modal-body">
+			<p class="lead">You have now successfully registered on SaveNSwap</p>
+			<p class="lead">However, in order to get the best user experice, you should complete your profile just a bit more.</p>
+			</div>
+			<div class="modal-footer">
+			<button class="btn btn-large btn-primary editProfileBtn" data-dismiss="modal" aria-hidden="true">Okey, take me there</button>
+			<button class="btn btn-large" data-dismiss="modal">Ill rather do this later</button>
+			</div>
+			</div>
+
+
+
+			<div class="tabbable" style="margin-bottom: 18px;">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">My Things</a></li>
+                <li class=""><a href="#tab2" data-toggle="tab">My Love Environment Blog</a></li>
+
+                <% if ( isUser == true) { %>
+                <li class=""><a href="#tab3" data-toggle="tab">My Swap Requests</a></li>
+                <% } %>
+              </ul>
+              <div class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
+                
+                <div class="tab-pane active" id="tab1">
+
+                <div class="row artifact-row">
+					<% _.each(things, function(thing, i){ %>
+						<div class="span3">
+							<div class="artifact-cat">
+
+								<a href="" class="artifact-prThingsap" id="thingPrImg_<%= thing.get('_id') %>">
+
+									<img src="/img/<%= thing.get('imgPath') %>"
+						 				class="artifact-medium img-polaroid prThingImg" >
+
+						 			<% if (isUser != true) { %>
+										<button class="checkOutButton btn btn-success btn-medium askToSwapSpec" id="thingPrBtn_<%= thing.get('_id') %>">Ask to Swap</button>
+									<% } else { %>
+										<button class="checkOutButton btn btn-success btn-medium thingRmBtn" id="thingPrBtn_<%= thing.get('_id') %>">Remove this</button>
+										<% } %>
+								</a>
+						
+								<div class="underThing">
+									
+									<p class="likes">
+									<a href="" class="loveProfileTree" id="loveProfileTree_<%=i%>">
+										<img src="/img/tree.png" class="tree" />
+									</a>
+									<%= thing.get('loves').length%> Loves
+									</p>
+									<p class="small"><%= thing.get('placementCity') %>,<%= thing.get('placementCountry') %> </p>
+
+									<p>
+									<% if (thing.get('tags').length > 0) { %>
+										<i class="icon-leaf"></i>
+									<%}%>
+									<% _.each(thing.get('tags'), function(tag) { %> 
+										<%= tag %> <i class="icon-leaf"></i>
+									<% }) %>
+									</p>
+								</div>
+							</div>
+						</div>
+				
+					<% if ( (i+1) % 4 == 0 ) {%>
+						</div>
+						<div class="row artifact-row">
+					<% } %>
+				<% }) %>
+
+				</div> <!-- end row-artifact-row --> 
+                </div>
+                <div class="tab-pane" id="tab2">
+                <% if ( isUser == true) { %>
+                	<p class="lead">
+                		Add new posts to your Love-environment blog!
+                		Show people how you care for the environment
+                		and help make the world a cleaner and more 
+                		environment-caring place to live in </p>
+
+                	<form id ="addBlogPost">
+					  <fieldset>
+					    <legend></legend>
+					    <label></label>
+					    <textarea placeholder="Add an image capture!" id="newPostText"rows"3"></textarea>
+						   <input type="file" id="postImage"></input>
+						   <p><button type="submit" class="btn btn-success">Post</button></p>
+						 </fieldset>
+					</form>
+
+                <% } %>
+
+                <% _.each(loveEnvBlogPosts, function(post) { %>
+					<div class="row-fluid artifact-row">
+						<div class="span7">
+						<img src="/img/<%= post.imgPath %>"
+						 		class="artifact-big img-polaroid">
+						</div>
+						<div class="span5">
+							<p class="lead"><%= post.text %> </p>
+							<p>
+							<a href="" class="likeTree">
+								<img src="/img/tree.png" style="width:20px" class="tree" />
+							</a>
+							 <%= post.likes.length %> likes </p>
+						</div>
+					</div>
+
+					<hr class="soften">
+                <% }) %>                 
+
+                </div>
+
+                <% if ( true == isUser ) { %>
+                	<div class="tab-pane" id="tab3">
+                  		
+                	<% if ( swapRequests ) { %>
+                		<p class="lead">You Have Swap Requests!</p>
+                		<p>Reponse to them</p>
+                		
+                		<% _.each(swapRequests, function(sr) { %>
+                      		<div class="row-fluid">
+                      			<div class="span2">                      						
+                      				<img src="/img/<%=sr.from.imgPath%>" class="artifact-xsmall">
+                      			</div>
+                      			<div class="span8">
+                      				<p>
+                      				<%= sr.from.username.split(" ")[0]%> wants to swap 
+                      				<% if ( sr.thing != "General" ) {%>
+                      					</p><a href = "/#thing/<%= sr.thing %>">one of your things</a>
+                      				<% } else { %>
+                      					stuff with you! </p>
+                      				<% } %>
+                      					<a href="/#user/<%= sr.from._id %>">Check out his stuff first, to see </br>if he has something you would like</a>
+                      			</div>
+                      		
+                      			<div class="span2">
+                      				<button class="btn btn-mini btn-success accSwapBtnProfile" id="accSwapBtnProfile_<%= sr.from._id %>_<%= sr._id %>">Accept</button>
+                      				<button class="btn btn-mini rejSwapBtnProfile" id="rejSwapBtnProfile_<%= sr.from._id %>_<%= sr._id %>" rejSwap_<%= sr._id %>>Reject</button>
+                      			</div>
+                      		</div>
+                      		<br>
+                      	<% }) } %>
+						
+						<% if ( swapReplies ) { %>
+							<p class="lead">You have new responses to your Swap requests!</p>
+                			<p>Check them out</p>
+
+                      		<% _.each(swapReplies, function(sr) { %>
+                      				<div class="row-fluid">
+                      					<div class="span2"> 	
+											<img src="/img/<%=sr.fromId.imgPath%>" class="artifact-xsmall">
+                      					</div>
+                      					<div class="span8">
+                      						<a href="/#user/<%=sr.fromId._id%>">
+                      						<%= sr.fromId.username.split(" ")[0]%>responded to swapping: 
+                      						</br>"<%=sr.answer%>" </a>
+                      					</div>
+                      					<div class="span2">
+                      						<button class="btn btn-mini btn-success finishSwapProfile" id="accSwapBtnProfile_<%= sr._id %>">Nice</button>
+           								</div>
+           							</div>
+           							<br>
+           					<% }) %>
+                      	<% } %>
+                	</div> <!-- /tab-pane -->
+                <% } %>
+              </div>
+            </div>
+		</div>
+	</script>
+
+
+
+
+
+	<script type="text/template" id="editProfile-template">
+
+			<div class="container profile">
+				<form>
+
+				<div class="row-fluid">
+					<div class="span12">
+						<h1>Edit your profile</h1>
+						<p class="lead"><br>The information you provide here will help us<br>
+						make better recommendations of things you might like!<br>
+						Note that you <strong> do not</strong> have to enter anything here,<br>
+						but doing so really improves the quality of SwapNSave.com!</p>
+					
+						<hr class="soften">
+					</div>
+				</div> <!-- row fluid -->
+				
+				<div class="row-fluid">
+				<div class="span7">
+					<div class="control-group">
+						<label class="control-label" for="inputUsername">Username</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="ed_inputUsername" placeholder="Username" value="<%=p.username%>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputCountry">Country</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="ed_inputCountry" placeholder="Country you live in" value="<%=p.country%>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputCountry">City</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="ed_inputCity" placeholder="City you live in" value="<%=p.city%>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputZipCode">Zip code</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="ed_inputZipCode" placeholder="Zip code" value="<%=p.zipCode%>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputEmail">Email</label>
+						<div class="controls">
+							<input type="email" class="input-xlarge" id="ed_inputEmail" placeholder="your_email@address.com"value="<%=p.email%>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputAbout">Tell us a little bit about yourself!</label>
+						<div class="controls">						
+							<textarea id="ed_inputAbout" class="input-xlarge" rows="3" placeholder="Just a short description :)"><%=p.about%></textarea>	
+						</div>
+					</div>
+
+					<hr class="soften">
+					
+					<h2> Your interests </h2>
+					<p>The tags you add here represents the things you are</p>
+					<p>generally looking for. Adding interest-tags lets you get </p>
+					<p>recommendations for other people who like the same things as you! </p>
+
+					<br>
+					
+					
+					<div class="control-group">
+						<label class="control-label lead" for="inputInterests">Things you are looking for:</label>
+						<div class="controls">
+						
+							<input type="text" class="input-medium" id="ed_inputInterests" placeholder="Couch, Tv, Hammer, Watch, Necklace, etc..">
+
+							<div class="well interestsPool">
+								<% _.each(p.interests, function(interest) { %>
+								<a href="#" class="mytooltip" data-toggle="tooltip" title="Click to Remove" id = "tooltip_<%=interest%>">
+								<span class="label label-info tag-label"><%=interest%></span>
+								</a>
+							<% }) %>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				<div class="span5">
+
+						<div id="drop_zone" class="artifact-cat">
+							<img id="profileEditImg" src="/img/<%=p.imgPath%>" alt="Profile image" class="img-polaroid">
+							
+							<h3 id="dropProfileTxt">Drop your <br>profile image here</h3>
+						</div>
+						<output id="file_list2"></output>
+						<div id="profileImgBtn">
+							<h3 id="chooseNewFile">Or pick a file</h3>
+							<input type="file" id="profileImgBtn" value="sap">
+						</div>					
+					</div>
+				</div>	
+
+				<button class="btn btn-success btn-large" id="saveProfile">Save</button>					
+			</form>
+		</div>
+	</script>
+	
+
+<script type="text/javascript" src="/js/libs/underscore-1.4.4.js"></script> 
+<script type="text/javascript" src="/js/libs/backbone-0.9.10.js"></script> 
+<script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/templateFetcher.js"></script>
+<script type="text/javascript" src="/js/Registry.js"></script>
+<script type="text/javascript" src="/js/CalculateMatch.js"></script>
+<script type="text/javascript" src="/js/models/Thing.js"></script>
+<script type="text/javascript" src="/js/models/ShoppingCart.js"></script>
+<script type="text/javascript" src="/js/models/LoveEnvBlog.js"></script>
+<script type="text/javascript" src="/js/models/User.js"></script>
+<script type="text/javascript" src="/js/models/SwapRequest.js"></script>
+<script type="text/javascript" src="/js/models/SwapReply.js"></script>
+<script type="text/javascript" src="/js/collections/ThingCollection.js"></script>
+<script type="text/javascript" src="/js/models/ThingCategory.js"></script>
+<script type="text/javascript" src="/js/models/NSItem.js"></script>
+<script type="text/javascript" src="/js/collections/NSItemCollection.js"></script>
+<script type="text/javascript" src="/js/views/ThingThumbnailView.js"></script>
+<script type="text/javascript" src="/js/collections/ThingCategoryCollection.js"></script>
+<script type="text/javascript" src="/js/views/CategoryView.js"></script>
+<script type="text/javascript" src="/js/views/AdminView.js"></script>
+<script type="text/javascript" src="/js/views/EditProfileView.js"></script>
+<script type="text/javascript" src="/js/views/NavigationView.js"></script>
+<script type="text/javascript" src="/js/views/ThingView.js"></script>
+<script type="text/javascript" src="/js/views/MainBannerView.js"></script>
+<script type="text/javascript" src="/js/views/FrontPageView.js"></script>
+<script type="text/javascript" src="/js/views/ProfileView.js"></script>
+<script type="text/javascript" src="/js/views/AddNewThingView.js"></script>
+<script type="text/javascript" src="/js/views/ThingsView.js"></script>
+<script type="text/javascript" src="/js/views/NetshopView.js"></script>
+<script type="text/javascript" src="/js/views/NetshopCatView.js"></script>
+<script type="text/javascript" src="/js/views/ShoppingCartView.js"></script>
+<script type="text/javascript" src="/js/routers/router.js"></script>
+<script data-main="/js/main" src="/js/libs/require.js"></script>
+  <!--[if lt IE 7]><script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script><script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})
+</script><![endif]-->
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=438527672837237";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</body>
+</html>

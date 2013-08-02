@@ -1,0 +1,41 @@
+<div class="row artifact-row">
+	<% _.each(things, function(thing, i){ %>
+	<div class="span3">
+		<div class="artifact-cat">
+
+			<a href="" class="artifact-imgsap"
+			id="thing_<%= i %>_<%= thing.get('_id') %>">
+			<img src="/img/<%= thing.get('imgPath') %>"
+			class="artifact-medium img-polaroid thingImg" id="thingImg_<%= i %>">
+
+			<button class="checkOutButton btn btn-success btn-medium" id="thingBtn_<%= i %>">Check out</button>
+		</a>
+		<div class="underThing">
+
+							<p class="likes">
+								<a href="" class="loveTree"  id="loveTree_<%=i%>">
+									<img src="/img/tree.png" class="tree" />
+								</a>
+								<%= thing.get('loves').length%> Loves
+							</p>
+							<p class="small"><%= thing.get('placementCity') %>,<%= thing.get('placementCountry') %> </p>
+
+							<p>
+							<% if (thing.get('tags').length > 0) { %>
+								<i class="icon-leaf"></i>
+							<%}%>
+							<% _.each(thing.get('tags'), function(tag) { %> 
+								<%= tag %> <i class="icon-leaf"></i>
+							<% }) %>
+							</p>
+						</div>
+	</div>
+</div>
+
+<% if ( (i+1) % 4 == 0 ) {%>
+</div>
+<div class="row artifact-row">
+	<% } %>
+	<% }) %>
+
+	</div> <!-- end row-artifact-row -->

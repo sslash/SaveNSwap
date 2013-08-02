@@ -1,0 +1,14 @@
+---
+applications:
+- name: savenswap
+  framework: node
+  runtime: node08
+  memory: 1G
+  instances: 1
+  url: savenswap.${target-base}
+  path: .
+  services:
+    mongodb-2d174:
+      vendor: mongodb
+      version: '2.0'
+      tier: free

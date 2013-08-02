@@ -1,0 +1,40 @@
+<div class="container-fluid netshop">
+	<div class="container">
+		<div class="jumbotron masthead">
+			<h2><%= category %></h2>
+		</div>
+
+		<hr class="soften">
+
+		<% _.each(items, function(i){ %>
+			<div class="thumbnail ns_item">
+			<div class="artifact-cat">
+				<img src="img/smoothie.jpg"  >
+					<a href="#" class="buyBtn"id="buyBtn_<%=i._id%>"><i class="icon-shopping-cart"></i>
+						Buy
+					</a>
+			</div>
+			
+			<a href="#netshop/kitchen" class="myPop" data-toggle="popover" data-placement="bottom" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus.Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="<%=i.title%>"style="float: right">Read More</a>
+
+
+				<p><%= i.title %></p>
+				<p><small><%= i.price %> kr</small></p>
+		</div>
+		<% }) %>
+
+
+		<div class="navbar navbar-fixed-bottom navbar-inverse">
+			<div class="navbar-inner">
+				<ul class="nav pull-right">
+					<li class="divider">
+						<p><a class="brand">Shopping-cart (<%= sc.items.length %>)</a></p>
+						<p><a href="/#netshop/cart">Go to cart</a> 
+						<i class="icon-shopping-cart icon-white"></i></p>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>

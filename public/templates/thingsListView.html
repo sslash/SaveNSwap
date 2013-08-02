@@ -1,0 +1,144 @@
+<div class="container"> 
+
+	<div id="mustBeLoggedInModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-body center">
+			<p class="lead">In order to use saveNswap you must either</p>
+
+			<a href="#signInModal" data-dismiss="modal"  data-toggle="modal" aria-hidden="true" class="btn btn-xlarge btn-primary">Sign in</a>
+			Or
+			<a href="#signUpModal" class="btn btn-xlarge btn-success" data-dismiss="modal"  data-toggle="modal" aria-hidden="true">Register</a>
+		</p>
+	</div>
+</div>
+
+<div class="front-page-marketing">
+	<h2 class="text-center">Search result for "<%= query %>"</h2>
+</div>
+<hr class="soften">
+
+
+<div class="row">
+	<div class="span3">
+
+		<ul class="nav nav-list sidenav">
+			<li><i class="icon-heart"></i>
+				<label class="checkbox">
+					Give away's<input type="checkbox" checked=true id="giveaways_chck">
+				</label>
+			</li>
+			<li><i class="icon-retweet"></i>
+				<label class="checkbox">
+					Swap's<input type="checkbox" checked=true id="swaps_chck">
+				</label>
+			</li>
+		</ul>
+
+
+		<p class="lead sidenavText">Filter by Area</p>
+		<ul class="nav nav-list sidenav">
+			<li><i class="icon-globe"></i>
+				<p>Country</p>
+				<input type="text" id="countryFilter" placeholder="Enter country"></input>
+			</li>
+			<li>
+				<p>City <i class="icon-globe"></i></p>
+				<input type="text" id="cityFilter" placeholder="Enter city"></input>
+			</li>
+		</ul>
+
+		<p class="lead sidenavText">Filter by category</p>
+		<ul class="nav nav-list sidenav">
+			<form>
+			<li><i class="icon-user"></i>
+				<label class="radio">
+					All categories<input type="radio" name="radCat" checked value="All Categories">
+				</label>
+			</li>
+			<li><i class="icon-user"></i>
+				<label class="radio">
+					Men's fashion<input type="radio" name="radCat" value="Mens Fashion">
+				</label>
+			</li>
+			<li><i class="icon-user"></i>
+				<label class="radio">
+					Women's fashion<input type="radio" name="radCat"  value="Womens Fashion">
+				</label>
+			</li>
+			<li><i class="icon-globe"></i>
+				<label class="radio">
+					Children's<input type="radio" name="radCat" value="Childrens">
+				</label>
+			</li>
+
+			<li><i class="icon-star"></i>
+				<label class="radio">
+					Books<input type="radio" name="radCat" value="Books">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Retro<input type="radio" name="radCat" value="Retro">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Interiour<input type="radio" name="radCat" value="Interiour">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Music and Film<input type="radio" name="radCat" value="Music And Film">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Hobby<input type="radio" name="radCat" value="Hobby">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Video Games<input type="radio" name="radCat" value="Video Games">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Art<input type="radio" name="radCat" value="Art">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Instruments<input type="radio" name="radCat" value="Instrument">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+					Photo<input type="radio" name="radCat" value="Photo">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+				Tools<input type="radio" name="radCat" value="Tools">
+				</label>
+			</li>
+			<li><i class="icon-thumbs-up"></i>
+				<label class="radio">
+				Sport<input type="radio" name="radCat" value="Sport">
+				</label>
+			</li>
+			</form>
+		</ul>
+
+		<!-- <p class="lead sidenavText">Add Tags</p>
+		<ul class="nav nav-list sidenav">
+			<li><i class="icon-tags"></i>
+				<p>Tags</p>
+				<input type="text" placeholder="Tag1, tag2, tag3.."></input>
+			</li>
+		</ul> -->
+	</div> <!-- /span3 -->
+
+	<div class="span9">
+		<div id="listOfThings"></div>
+	</div><!-- /span9 --> 
+</div> <!-- /row -->  
+</div> <!-- /container -->  

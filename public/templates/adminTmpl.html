@@ -1,0 +1,79 @@
+<div class="container-fluid admin">
+	<div class="container">
+			<h2>Administrator side</h2>
+
+		<hr class="soften">
+
+		<p class="lead">Legg til netshop vare</p>
+		<form class="form-horizontal" id="vareForm">
+			<div class="control-group">
+				<label class="control-label" for="inputEmail">Tittel</label>
+				<div class="controls">
+					<input type="text" id="inputTittel" placeholder="Tittel">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPassword">Beskrivelse</label>
+				<div class="controls">
+					<input type="text" id="inputBeskrivelse" placeholder="Beskrivelse">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="inputPassword">Pris</label>
+				<div class="controls">
+					<input type="text" id="inputPris" placeholder="Pris">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="inputPassword">Bilde</label>
+				<div class="controls">
+					<p><input type="file" id="bilde" title="foo"></p>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Kategori</label>
+				<div class="controls">
+					<select id="inputCategory">
+						<option>kitchen</option>
+						<option>bath</option>
+						<option>accessories</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<button type="submit" class="btn">Legg til</button>
+				</div>
+			</div>
+		</form>
+
+		<hr class="soften">
+		<p class="lead">Alle varer:</p>
+
+		<table class="table table-hover">
+ 			<thead>
+                <tr>
+                  <th>Produkt</th>
+                  <th>Pris</th>
+                  <th>Kategori</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+              	<% _.each(items, function(i, index) { %>
+                <tr>
+                  <td> <img src="img/<%=i.imgPath%>" class="img-mini"/> <%= i.title %></td>
+                  <td><%=i.price %></td>
+                  <td><%=i.category %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+		</table>
+
+
+	</div>
+</div>
